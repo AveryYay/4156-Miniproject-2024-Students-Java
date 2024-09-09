@@ -78,6 +78,24 @@ public class CourseUnitTests {
     assertFalse(testCourse.enrollStudent());
   }
 
+  @Test
+  public void reassignInstructorTest() {
+    testCourse.reassignInstructor("James Bond");
+    assertEquals("James Bond", testCourse.getInstructorName());
+  }
+
+  @Test
+  public void reassignLocationTest() {
+    testCourse.reassignLocation("123 IAB");
+    assertEquals("123 IAB", testCourse.getCourseLocation());
+  }
+
+  @Test
+  public void reassignTimeTest() {
+    testCourse.reassignTime("09:00-10:00");
+    assertEquals("09:00-10:00", testCourse.getCourseTimeSlot());
+  }
+
   /** The test course instance used for testing. */
   public static Course testCourse;
 }
