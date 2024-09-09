@@ -1,6 +1,8 @@
 package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,74 @@ public class CourseUnitTests {
   public void toStringTest() {
     String expectedResult = "\nInstructor: Griffin Newbold; Location: 417 IAB; Time: 11:40-12:55";
     assertEquals(expectedResult, testCourse.toString());
+  }
+
+  @Test
+  public void getCourseLocationTest() {
+    assertEquals("417 IAB", testCourse.getCourseLocation());
+  }
+
+  @Test
+  public void getCourseTimeSlotTest() {
+    assertEquals("11:40-12:55", testCourse.getCourseTimeSlot());
+  }
+
+  @Test
+  public void getInstructorNameTest() {
+    assertEquals("Griffin Newbold", testCourse.getInstructorName());
+  }
+
+  @Test
+  public void isCourseFullTest() {
+    assertFalse(testCourse.isCourseFull());
+  }
+
+  @Test
+  public void setEnrolledStudentCountTest() {
+    testCourse.setEnrolledStudentCount(200);
+    assertFalse(testCourse.isCourseFull());
+  }
+
+  @Test
+  public void dropStudentSuccessTest() {
+    testCourse.setEnrolledStudentCount(100);
+    assertTrue(testCourse.dropStudent());
+  }
+
+  @Test
+  public void dropStudentFailTest() {
+    testCourse.setEnrolledStudentCount(0);
+    assertFalse(testCourse.dropStudent());
+  }
+
+  @Test
+  public void enrollStudentSuccessTest() {
+    testCourse.setEnrolledStudentCount(0);
+    assertTrue(testCourse.enrollStudent());
+  }
+
+  @Test
+  public void enrollStudentFailTest() {
+    testCourse.setEnrolledStudentCount(250);
+    assertFalse(testCourse.enrollStudent());
+  }
+
+  @Test
+  public void reassignInstructorTest() {
+    testCourse.reassignInstructor("James Bond");
+    assertEquals("James Bond", testCourse.getInstructorName());
+  }
+
+  @Test
+  public void reassignLocationTest() {
+    testCourse.reassignLocation("123 IAB");
+    assertEquals("123 IAB", testCourse.getCourseLocation());
+  }
+
+  @Test
+  public void reassignTimeTest() {
+    testCourse.reassignTime("09:00-10:00");
+    assertEquals("09:00-10:00", testCourse.getCourseTimeSlot());
   }
 
   /** The test course instance used for testing. */
