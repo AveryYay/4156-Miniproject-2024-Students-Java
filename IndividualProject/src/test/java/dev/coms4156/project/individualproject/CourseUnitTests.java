@@ -21,6 +21,10 @@ public class CourseUnitTests {
     testCourse = new Course("Griffin Newbold", "417 IAB", "11:40-12:55", 250);
   }
 
+  @Test
+  public void getEnrolledStudentCountTest() {
+    assertEquals(0, testCourse.getEnrolledStudentCount());
+  }
 
   @Test
   public void toStringTest() {
@@ -44,14 +48,19 @@ public class CourseUnitTests {
   }
 
   @Test
-  public void isCourseFullTest() {
+  public void isCourseFullFullTest() {
+    testCourse.setEnrolledStudentCount(250);
+    assertTrue(testCourse.isCourseFull());
+  }
+  @Test
+  public void isCourseNotFullTest() {
+    testCourse.setEnrolledStudentCount(249);
     assertFalse(testCourse.isCourseFull());
   }
 
   @Test
   public void setEnrolledStudentCountTest() {
-    testCourse.setEnrolledStudentCount(200);
-    assertFalse(testCourse.isCourseFull());
+    assertEquals(0, testCourse.getEnrolledStudentCount());
   }
 
   @Test

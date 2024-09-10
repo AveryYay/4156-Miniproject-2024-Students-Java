@@ -22,7 +22,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 /**
- * This class contains unit tests for the {@code Course} class.
+ * This class contains unit tests for the {@code MyFileDatabase} class.
  */
 @SpringBootTest
 @ContextConfiguration
