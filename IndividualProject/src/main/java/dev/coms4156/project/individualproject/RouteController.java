@@ -1,6 +1,8 @@
 package dev.coms4156.project.individualproject;
 
 import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class RouteController {
-
   /**
    * Redirects to the homepage.
    *
@@ -41,7 +42,6 @@ public class RouteController {
     try {
       HashMap<String, Department> departmentMapping;
       departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
-
       if (!departmentMapping.containsKey(deptCode.toUpperCase())) {
         return new ResponseEntity<>("Department Not Found", HttpStatus.OK);
       } else {
@@ -73,6 +73,7 @@ public class RouteController {
                                           @RequestParam(value = "courseCode") int courseCode) {
     try {
       boolean doesDepartmentExists = retrieveDepartment(deptCode).getStatusCode() == HttpStatus.OK;
+      System.out.println(IndividualProjectApplication.myFileDatabase.getDepartmentMapping().size());
       if (doesDepartmentExists) {
         HashMap<String, Department> departmentMapping;
         departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
@@ -112,7 +113,6 @@ public class RouteController {
     try {
       boolean doesCourseExists;
       doesCourseExists = retrieveCourse(deptCode, courseCode).getStatusCode() == HttpStatus.OK;
-
       if (doesCourseExists) {
         HashMap<String, Department> departmentMapping;
         departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
