@@ -73,7 +73,6 @@ public class RouteController {
                                           @RequestParam(value = "courseCode") int courseCode) {
     try {
       boolean doesDepartmentExists = retrieveDepartment(deptCode).getStatusCode() == HttpStatus.OK;
-      System.out.println(IndividualProjectApplication.myFileDatabase.getDepartmentMapping().size());
       if (doesDepartmentExists) {
         HashMap<String, Department> departmentMapping;
         departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();

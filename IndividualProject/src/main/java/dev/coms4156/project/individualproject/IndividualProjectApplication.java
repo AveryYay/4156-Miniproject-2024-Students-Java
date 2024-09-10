@@ -296,6 +296,10 @@ public class IndividualProjectApplication implements CommandLineRunner {
     }
   }
 
+  public void setSaveData(boolean b) {
+    saveData = b;
+  }
+
 
   //Database Instance
   public static MyFileDatabase myFileDatabase;
