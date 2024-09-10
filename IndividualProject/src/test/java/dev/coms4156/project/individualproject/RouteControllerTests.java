@@ -30,7 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class RouteControllerTests {
   @MockBean
-  private MyFileDatabase myFileDatabase;  // 移除 static
+
+  private MyFileDatabase myFileDatabase;
 
   private HashMap<String, Department> mockDepartmentData;
 
@@ -53,6 +54,7 @@ public class RouteControllerTests {
 
     Department COMSDept = new Department("COMS", mockCourses, "Luca Carloni", 2700);
     mockDepartmentData.put("COMS", COMSDept);
+    myFileDatabase.setMapping(mockDepartmentData);
     when(myFileDatabase.getDepartmentMapping()).thenReturn(mockDepartmentData);
     IndividualProjectApplication.myFileDatabase = myFileDatabase;
   }

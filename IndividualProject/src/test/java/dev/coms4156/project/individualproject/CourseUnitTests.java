@@ -52,7 +52,7 @@ public class CourseUnitTests {
     testCourse.setEnrolledStudentCount(250);
     assertTrue(testCourse.isCourseFull());
   }
-  
+
   @Test
   public void isCourseNotFullTest() {
     testCourse.setEnrolledStudentCount(249);
