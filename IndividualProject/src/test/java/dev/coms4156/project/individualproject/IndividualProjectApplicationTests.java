@@ -1,38 +1,46 @@
 package dev.coms4156.project.individualproject;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.io.File;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ContextConfiguration
 public class IndividualProjectApplicationTests {
-
+  @MockBean
+  private MyFileDatabase mockFileDatabase;
   private IndividualProjectApplication application;
+  public static MyFileDatabase originalDatabase;
+  @BeforeAll
+  public static void saveOriginalDatabase() {
+    originalDatabase = IndividualProjectApplication.myFileDatabase;
+  }
+
+  @AfterAll
+  public static void restoreOriginalDatabase() {
+    IndividualProjectApplication.myFileDatabase = originalDatabase;
+  }
 
   @BeforeEach
   public void setup(){
     application = new IndividualProjectApplication();
+    IndividualProjectApplication.myFileDatabase = mockFileDatabase;
   }
 
   @AfterEach
   public void reset() {
-    application.resetDataFile();
     application.setSaveData(true);
   }
 
   @Test
   public void mainWithSetUpTest() {
+    doNothing().when(mockFileDatabase).saveContentsToFile();
     IndividualProjectApplication.main(new String[]{"setup"});
     assertNotNull(IndividualProjectApplication.myFileDatabase);
-    File file = new File("./data.txt");
-    assertTrue(file.exists());
   }
 
   @Test
@@ -40,17 +48,13 @@ public class IndividualProjectApplicationTests {
     String[] args = {"setup"};
     application.run(args);
     assertNotNull(IndividualProjectApplication.myFileDatabase);
-    File file = new File("./data.txt");
-    assertTrue(file.exists());
   }
 
   @Test
   public void runTestWithOutSetUpTest() {
-    String[] args = {};
+    String[] args = {"blabla"};
     application.run(args);
     assertNotNull(IndividualProjectApplication.myFileDatabase);
-    File file = new File("./data.txt");
-    assertTrue(file.exists());
   }
 
   @Test
@@ -62,41 +66,25 @@ public class IndividualProjectApplicationTests {
 
   @Test
   public void resetDataFileTest() {
+    MyFileDatabase testData = new MyFileDatabase(100, "./invalidDataFile");
+    IndividualProjectApplication.overrideDatabase(testData);
     application.resetDataFile();
     assertNotNull(IndividualProjectApplication.myFileDatabase.getDepartmentMapping());
   }
 
   @Test
   public void onTerminationSaveFileTest() {
-    MyFileDatabaseTestImpl testData = new MyFileDatabaseTestImpl(100, "./invalidDataFile");
-    IndividualProjectApplication.overrideDatabase(testData);
     application.setSaveData(true);
+    doNothing().when(mockFileDatabase).saveContentsToFile();
     application.onTermination();
-    MyFileDatabaseTestImpl test = (MyFileDatabaseTestImpl) IndividualProjectApplication.myFileDatabase;
-    assertTrue(test.isSaveCalled());
+    verify(mockFileDatabase, times(1)).saveContentsToFile();
   }
 
   @Test
   public void onTerminationNotSaveFileTest() {
-    MyFileDatabaseTestImpl testData = new MyFileDatabaseTestImpl(100, "./invalidDataFile");
-    IndividualProjectApplication.overrideDatabase(testData);
+    application.setSaveData(false);
     application.onTermination();
-    MyFileDatabaseTestImpl test = (MyFileDatabaseTestImpl) IndividualProjectApplication.myFileDatabase;
-    assertFalse(test.isSaveCalled());
-  }
-
-  public static class MyFileDatabaseTestImpl extends MyFileDatabase {
-    private boolean saveCalled = false;
-    public MyFileDatabaseTestImpl(int flag, String filePath) {
-      super(flag, filePath);
-    }
-    @Override
-    public void saveContentsToFile() {
-      saveCalled = true;
-    }
-    public boolean isSaveCalled() {
-      return saveCalled;
-    }
+    verify(mockFileDatabase, never()).saveContentsToFile();
   }
 
 }
