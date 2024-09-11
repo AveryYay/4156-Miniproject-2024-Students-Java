@@ -1,7 +1,6 @@
 package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +29,8 @@ public class DepartmentUnitTests {
 
   @Test
   public void toStringTest() {
-    String expectedResult = "COMS 1004: \n Instructor: Adam Cannon; Location: 417 IAB; " +
-        "Time: 11:40-12:55\n" + "COMS 3134: \n Instructor: Brian Borowski; Location: 301 URIS; " +
+    String expectedResult = "COMS 1004: \nInstructor: Adam Cannon; Location: 417 IAB; " +
+        "Time: 11:40-12:55\n" + "COMS 3134: \nInstructor: Brian Borowski; Location: 301 URIS; " +
         "Time: 4:10-5:25\n";
     assertEquals(expectedResult, testDepartment.toString());
   }

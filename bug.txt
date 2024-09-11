@@ -1,0 +1,47 @@
+Department.java:
+1. getDepartmentChair() originally returns "this.departmentChair", changed to return this.departmentChair
+    - PMD rule violation: Unused private field `departmentChair` in `Department` class.
+2. toString() originally only returns "result.toString()" as a string, while it should be result.toString().
+3. getNumberOfMajors() returns -this.numberOfMajors while it should return this.numberOfMajors.
+4. dropPersonFromMajor() now just decrements enrolledStudentCount regardless if the number of majors is zero.
+   According to the Javadoc, it should only drop if it's greater than zero. Changed to the correct logic.
+
+Course.java:
+1. getCourseLocation() returns this.instructorName while it should return the course location as the function
+   name stated. Changed to return this.courseLocation.
+2. getInstructorName() returns this.courseLocation while it should return the instructor name as the function
+   name stated. Changed to return this.instructorName.
+3. isCourseFull() originally return true if the capacity is greater than enrolled student count, while the correct
+   logic should be return true if the enrolled student count is greater than or equal to the capacity.
+   Changed to return enrollmentCapacity <= enrolledStudentCount.
+4. enrollStudent() originally just increments enrolledStudentCount regardless if the course is full. However,
+   according to the Javadoc, it should only enroll a student if there's space available. It also returns false
+   no matter what, while it should return true, if enrolled successfully, and return false otherwise.
+   Changed to the correct logic.
+5. dropStudent() originally just decrements enrolledStudentCount regardless if there is no student enrolled. However,
+   according to the Javadoc, it should only drop a student if a student is enrolled. It also returns false
+   no matter what, while it should return true, if dropped successfully, and return false otherwise.
+   Changed to the correct logic.
+
+RouteController.java
+1. findCourseTime returns new ResponseEntity<>("The course meets at: " + "some time ", HttpStatus.OK) if the
+   course does exist. Changed to return new ResponseEntity<>("The course meets at: " +
+   requestedCourse.getCourseTimeSlot(), HttpStatus.OK).
+   - PMD rule violation: Unused private field `requestedCourse` in `RouteController` class.
+2. In retrieveDepartment, it returns HttpStatus.NOT_FOUND when the department was found, and returns HttpStatus.OK
+   when the department was not found. -->Swapped
+3. retrieveCourse returns HttpStatus.FORBIDDEN if the course is not found, which is inappropriate. Changed to return
+   HttpStatus.OK.
+4. getMajorCtFromDept is returning the negative value -departmentMapping.get(deptCode) if the department is found,
+   which should return departmentMapping.get(deptCode).
+   It also returns HttpStatus.Forbidden when the department is not found, which is inappropriate. Changed to return
+   HttpStatus.NOT_FOUND instead.
+5. changeCourseTime returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
+   was updated successfully."
+6. changeCourseTeacher returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
+   was updated successfully."
+7. changeCourseLocation returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
+   was updated successfully."
+8. setEnrollmentCount returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
+   was updated successfully."
+9. handleException returns HttpStatus.Ok, which is inappropriate. Changed to return HttpStatus.INTERNAL_SERVER_ERROR.
