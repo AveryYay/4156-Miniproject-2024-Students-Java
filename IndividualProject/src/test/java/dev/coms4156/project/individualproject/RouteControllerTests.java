@@ -461,9 +461,8 @@ public class RouteControllerTests {
   @Test
   public void handleExceptionTest() throws Exception {
     when(myFileDatabase.getDepartmentMapping()).thenThrow(new RuntimeException("Database Error"));
-    mockMvc.perform(get("/retrieveCourse")
+    mockMvc.perform(get("/retrieveDept")
             .param("deptCode", "COMS")
-            .param("courseCode", "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError())
             .andExpect(content().string("An Error has occurred"));
