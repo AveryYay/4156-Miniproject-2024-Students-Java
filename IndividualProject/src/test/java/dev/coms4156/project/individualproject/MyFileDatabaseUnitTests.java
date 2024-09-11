@@ -1,7 +1,6 @@
 package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class contains unit tests for the {@code MyFileDatabase} class.
@@ -105,8 +105,7 @@ public class MyFileDatabaseUnitTests {
       out.writeObject("not a HashMap");
     }
 
-    MyFileDatabase db = new MyFileDatabase(0, testFilePath);
-    assertThrows(IllegalArgumentException.class, db::getDepartmentMapping);
+    assertThrows(IllegalArgumentException.class, () -> new MyFileDatabase(0, testFilePath));
 
     File file = new File(testFilePath);
     if (file.exists()) {
@@ -155,83 +154,13 @@ public class MyFileDatabaseUnitTests {
 
   @Test
   public void toStringTest() {
-    String expectedOutput = "For the COMS department: \n" +
-        "Department Name: COMS, Chair: Luca Carloni, Students: 2700\n" +
-        "Course 1004: Adam Cannon, Location: 417 IAB, Time: 11:40-12:55, Capacity: 400\n" +
-        "Course 3134: Brian Borowski, Location: 301 URIS, Time: 4:10-5:25, Capacity: 250\n" +
-        "Course 3157: Jae Lee, Location: 417 IAB, Time: 4:10-5:25, Capacity: 400\n" +
-        "Course 3203: Ansaf Salleb-Aouissi, Location: 301 URIS, Time: 10:10-11:25, Capacity: 250\n" +
-        "Course 3261: Josh Alman, Location: 417 IAB, Time: 2:40-3:55, Capacity: 150\n" +
-        "Course 3251: Tony Dear, Location: 402 CHANDLER, Time: 1:10-3:40, Capacity: 125\n" +
-        "Course 3827: Daniel Rubenstein, Location: 207 Math, Time: 10:10-11:25, Capacity: 300\n" +
-        "Course 4156: Gail Kaiser, Location: 501 NWC, Time: 10:10-11:25, Capacity: 120\n" +
-
-        "For the ECON department: \n" +
-        "Department Name: ECON, Chair: Michael Woodford, Students: 2345\n" +
-        "Course 1105: Waseem Noor, Location: 309 HAV, Time: 2:40-3:55, Capacity: 210\n" +
-        "Course 2257: Tamrat Gashaw, Location: 428 PUP, Time: 10:10-11:25, Capacity: 125\n" +
-        "Course 3211: Murat Yilmaz, Location: 310 FAY, Time: 4:10-5:25, Capacity: 96\n" +
-        "Course 3213: Miles Leahey, Location: 702 HAM, Time: 4:10-5:25, Capacity: 86\n" +
-        "Course 3412: Thomas Piskula, Location: 702 HAM, Time: 11:40-12:55, Capacity: 86\n" +
-        "Course 4415: Evan D Sadler, Location: 309 HAV, Time: 10:10-11:25, Capacity: 110\n" +
-        "Course 4710: Matthieu Gomez, Location: 517 HAM, Time: 8:40-9:55, Capacity: 86\n" +
-        "Course 4840: Mark Dean, Location: 142 URIS, Time: 2:40-3:55, Capacity: 108\n" +
-
-        "For the IEOR department: \n" +
-        "Department Name: IEOR, Chair: Jay Sethuraman, Students: 67\n" +
-        "Course 2500: Uday Menon, Location: 627 MUDD, Time: 11:40-12:55, Capacity: 50\n" +
-        "Course 3404: Christopher J Dolan, Location: 303 MUDD, Time: 10:10-11:25, Capacity: 73\n" +
-        "Course 3658: Daniel Lacker, Location: 310 FAY, Time: 10:10-11:25, Capacity: 96\n" +
-        "Course 4102: Antonius B Dieker, Location: 209 HAM, Time: 10:10-11:25, Capacity: 110\n" +
-        "Course 4106: Kaizheng Wang, Location: 501 NWC, Time: 10:10-11:25, Capacity: 150\n" +
-        "Course 4405: Yuri Faenza, Location: 517 HAV, Time: 11:40-12:55, Capacity: 80\n" +
-        "Course 4511: Michael Robbins, Location: 633 MUDD, Time: 9:00-11:30, Capacity: 150\n" +
-        "Course 4540: Krzysztof M Choromanski, Location: 633 MUDD, Time: 7:10-9:40, Capacity: 60\n" +
-
-        "For the CHEM department: \n" +
-        "Department Name: CHEM, Chair: Laura J. Kaufman, Students: 250\n" +
-        "Course 1403: Ruben M Savizky, Location: 309 HAV, Time: 6:10-7:25, Capacity: 120\n" +
-        "Course 1500: Joseph C Ulichny, Location: 302 HAV, Time: 6:10-9:50, Capacity: 46\n" +
-        "Course 2045: Luis M Campos, Location: 209 HAV, Time: 1:10-2:25, Capacity: 50\n" +
-        "Course 2444: Christopher Eckdahl, Location: 309 HAV, Time: 11:40-12:55, Capacity: 150\n" +
-        "Course 2494: Talha Siddiqui, Location: 202 HAV, Time: 1:10-5:00, Capacity: 24\n" +
-        "Course 3080: Milan Delor, Location: 209 HAV, Time: 10:10-11:25, Capacity: 60\n" +
-        "Course 4071: Jonathan S Owen, Location: 320 HAV, Time: 8:40-9:55, Capacity: 42\n" +
-        "Course 4102: Dalibor Sames, Location: 320 HAV, Time: 10:10-11:25, Capacity: 28\n" +
-
-        "For the PHYS department: \n" +
-        "Department Name: PHYS, Chair: Dmitri N. Basov, Students: 43\n" +
-        "Course 1001: Szabolcs Marka, Location: 301 PUP, Time: 2:40-3:55, Capacity: 150\n" +
-        "Course 1201: Eric Raymer, Location: 428 PUP, Time: 2:40-3:55, Capacity: 145\n" +
-        "Course 1602: Kerstin M Perez, Location: 428 PUP, Time: 10:10-11:25, Capacity: 140\n" +
-        "Course 2802: Yury Levin, Location: 329 PUP, Time: 10:10-12:00, Capacity: 60\n" +
-        "Course 3008: William A Zajc, Location: 329 PUP, Time: 10:10-11:25, Capacity: 75\n" +
-        "Course 4003: Frederik Denef, Location: 214 PUP, Time: 4:10-5:25, Capacity: 50\n" +
-        "Course 4018: James W McIver, Location: 307 PUP, Time: 2:40-3:55, Capacity: 30\n" +
-        "Course 4040: James C Hill, Location: 214 PUP, Time: 4:10-5:25, Capacity: 50\n" +
-
-        "For the ELEN department: \n" +
-        "Department Name: ELEN, Chair: Ioannis Kymissis, Students: 250\n" +
-        "Course 1201: David G Vallancourt, Location: 301 PUP, Time: 4:10-5:25, Capacity: 120\n" +
-        "Course 3082: Kenneth Shepard, Location: 1205 MUDD, Time: 4:10-6:40, Capacity: 32\n" +
-        "Course 3331: David G Vallancourt, Location: 203 MATH, Time: 11:40-12:55, Capacity: 80\n" +
-        "Course 3401: Keren Bergman, Location: 829 MUDD, Time: 2:40-3:55, Capacity: 40\n" +
-        "Course 3701: Irving Kalet, Location: 333 URIS, Time: 2:40-3:55, Capacity: 50\n" +
-        "Course 4510: Mohamed Kamaludeen, Location: 903 SSW, Time: 7:00-9:30, Capacity: 30\n" +
-        "Course 4702: Alexei Ashikhmin, Location: 332 URIS, Time: 7:00-9:30, Capacity: 50\n" +
-        "Course 4830: Christine P Hendon, Location: 633 MUDD, Time: 10:10-12:40, Capacity: 60\n" +
-
-        "For the PSYC department: \n" +
-        "Department Name: PSYC, Chair: Nim Tottenham, Students: 437\n" +
-        "Course 1001: Patricia G Lindemann, Location: 501 SCH, Time: 1:10-2:25, Capacity: 200\n" +
-        "Course 1610: Christopher Baldassano, Location: 200 SCH, Time: 10:10-11:25, Capacity: 45\n" +
-        "Course 2235: Katherine T Fox-Glassman, Location: 501 SCH, Time: 11:40-12:55, Capacity: 125\n" +
-        "Course 2620: Jeffrey M Cohen, Location: 303 URIS, Time: 1:10-3:40, Capacity: 60\n" +
-        "Course 3212: Mayron Piccolo, Location: 200 SCH, Time: 2:10-4:00, Capacity: 15\n" +
-        "Course 3445: Mariam Aly, Location: 405 SCH, Time: 2:10-4:00, Capacity: 12\n" +
-        "Course 4236: Trenton Jerde, Location: 405 SCH, Time: 6:10-8:00, Capacity: 18\n" +
-        "Course 4493: Jennifer Blaze, Location: 200 SCH, Time: 2:10-4:00, Capacity: 15\n";
-    assertEquals(expectedOutput, testDatabase.toString());
+    StringBuilder result = new StringBuilder();
+    for (Map.Entry<String, Department> entry : expectedData.entrySet()) {
+      String key = entry.getKey();
+      Department value = entry.getValue();
+      result.append("For the ").append(key).append(" department: \n").append(value.toString());
+    }
+    assertEquals(result.toString(), testDatabase.toString());
   }
 
   private static HashMap<String, Department> generateExpectedData() {
