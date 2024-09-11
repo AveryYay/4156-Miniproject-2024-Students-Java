@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -97,9 +96,8 @@ public class RouteControllerTests {
             .param("deptCode", "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.departmentName").value("COMS"))
-            .andExpect(jsonPath("$.departmentChair").value("Luca Carloni"))
-            .andExpect(jsonPath("$.numberOfMajors").value(2700));
+            .andExpect(content().string("COMS 1004: \nInstructor: Adam Cannon; Location: 417 IAB; " +
+                "Time: 11:40-12:55\n"));
   }
 
   @Test
@@ -118,11 +116,8 @@ public class RouteControllerTests {
             .param("courseCode", "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.courseCode").value("1004"))
-            .andExpect(jsonPath("$.instructorName").value("Adam Cannon"))
-            .andExpect(jsonPath("$.courseLocation").value("417 IAB"))
-            .andExpect(jsonPath("$.courseTimeSlot").value("11:40-12:55"))
-            .andExpect(jsonPath("$.capacity").value(400));
+            .andExpect(content().string("\nInstructor: Adam Cannon; Location: 417 IAB; " +
+                "Time: 11:40-12:55"));
   }
 
   @Test
@@ -133,6 +128,16 @@ public class RouteControllerTests {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andExpect(content().string("Course Not Found"));
+  }
+
+  @Test
+  public void retrieveCourseDepartmentNotFoundTest() throws Exception {
+    mockMvc.perform(get("/retrieveCourse")
+            .param("deptCode", "Random")
+            .param("courseCode", "1005")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andExpect(content().string("Department Not Found"));
   }
 
   @Test
@@ -165,9 +170,18 @@ public class RouteControllerTests {
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
             .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Course Not Found"));
+  }
+
+  @Test
+  public void isCourseFullDepartmentNotFoundTest() throws Exception {
+    mockMvc.perform(get("/isCourseFull")
+            .param("deptCode", "Random")
+            .param("courseCode", "1005")
+            .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andExpect(content().string("Course Not Found"));
-    Mockito.verify(myFileDatabase).getDepartmentMapping();
   }
 
   @Test
@@ -247,17 +261,17 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void findCourseTimeSlotSuccessTest() throws Exception {
+  public void findCourseTimeSuccessTest() throws Exception {
     mockMvc.perform(get("/findCourseTime")
             .param("deptCode", "COMS")
             .param("courseCode", "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("The course meets at: 11:40-12:55."));
+            .andExpect(content().string("The course meets at: 11:40-12:55"));
   }
 
   @Test
-  public void findCourseTimeSlotFailTest() throws Exception {
+  public void findCourseTimeFailTest() throws Exception {
     mockMvc.perform(get("/findCourseTime")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
