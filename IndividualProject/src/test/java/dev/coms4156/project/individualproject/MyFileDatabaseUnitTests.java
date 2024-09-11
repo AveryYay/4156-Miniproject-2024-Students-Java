@@ -1,16 +1,10 @@
 package dev.coms4156.project.individualproject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +14,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * This class contains unit tests for the {@code MyFileDatabase} class.
@@ -40,7 +39,7 @@ public class MyFileDatabaseUnitTests {
   }
 
   @Test
-  public void ModeNonZeroTest() {
+  public void modeNonZeroTest() {
     assertNull(testNonZeroDatabase.getDepartmentMapping());
   }
 
@@ -58,7 +57,8 @@ public class MyFileDatabaseUnitTests {
     for (String deptCode : expectedData.keySet()) {
       assertTrue(actualData.containsKey(deptCode));
       HashMap<String, Course> departmentCourses = actualData.get(deptCode).getCourseSelection();
-      HashMap<String, Course> expectedDepartmentCourses = expectedData.get(deptCode).getCourseSelection();
+      HashMap<String, Course> expectedDepartmentCourses =
+                  expectedData.get(deptCode).getCourseSelection();
       assertEquals(departmentCourses.size(), expectedDepartmentCourses.size());
       for (String courseId : expectedDepartmentCourses.keySet()) {
         assertTrue(departmentCourses.containsKey(courseId));
@@ -79,7 +79,8 @@ public class MyFileDatabaseUnitTests {
     for (String deptCode : expectedData.keySet()) {
       assertTrue(departmentMap.containsKey(deptCode));
       HashMap<String, Course> departmentCourses = departmentMap.get(deptCode).getCourseSelection();
-      HashMap<String, Course> expectedDepartmentCourses = expectedData.get(deptCode).getCourseSelection();
+      HashMap<String, Course> expectedDepartmentCourses =
+                expectedData.get(deptCode).getCourseSelection();
       assertEquals(departmentCourses.size(), expectedDepartmentCourses.size());
       for (String courseId : expectedDepartmentCourses.keySet()) {
         assertTrue(departmentCourses.containsKey(courseId));
@@ -106,11 +107,6 @@ public class MyFileDatabaseUnitTests {
     }
 
     assertThrows(IllegalArgumentException.class, () -> new MyFileDatabase(0, testFilePath));
-
-    File file = new File(testFilePath);
-    if (file.exists()) {
-      file.delete();
-    }
   }
 
   @Test
@@ -131,7 +127,8 @@ public class MyFileDatabaseUnitTests {
       for (String deptCode : expectedData.keySet()) {
         assertTrue(savedMap.containsKey(deptCode));
         HashMap<String, Course> departmentCourses = expectedData.get(deptCode).getCourseSelection();
-        HashMap<String, Course> expectedDepartmentCourses = savedMap.get(deptCode).getCourseSelection();
+        HashMap<String, Course> expectedDepartmentCourses =
+                  savedMap.get(deptCode).getCourseSelection();
         assertEquals(departmentCourses.size(), expectedDepartmentCourses.size());
         for (String courseId : expectedDepartmentCourses.keySet()) {
           assertTrue(departmentCourses.containsKey(courseId));

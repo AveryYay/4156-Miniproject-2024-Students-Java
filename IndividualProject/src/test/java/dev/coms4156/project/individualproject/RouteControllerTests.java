@@ -1,10 +1,17 @@
 package dev.coms4156.project.individualproject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.HashMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,14 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 /**
@@ -42,6 +41,11 @@ public class RouteControllerTests {
   public static void saveOriginalDatabase() {
     originalDatabase = IndividualProjectApplication.myFileDatabase;
   }
+  /**
+   * Sets up a department with sample courses for testing.
+   * This method initializes a Department object with test data
+   * and is executed before each test case.
+   */
 
   @BeforeEach
   public void setup() {
@@ -50,8 +54,8 @@ public class RouteControllerTests {
     HashMap<String, Course> mockCourses = new HashMap<>();
     mockCourses.put("1004", new Course("Adam Cannon", "417 IAB", "11:40-12:55", 400));
 
-    Department COMSDept = new Department("COMS", mockCourses, "Luca Carloni", 2700);
-    mockDepartmentData.put("COMS", COMSDept);
+    Department computerDept = new Department("COMS", mockCourses, "Luca Carloni", 2700);
+    mockDepartmentData.put("COMS", computerDept);
     myFileDatabase.setMapping(mockDepartmentData);
     when(myFileDatabase.getDepartmentMapping()).thenReturn(mockDepartmentData);
     IndividualProjectApplication.myFileDatabase = myFileDatabase;
@@ -66,27 +70,30 @@ public class RouteControllerTests {
   public void indexSlashTest() throws Exception {
     mockMvc.perform(get("/"))
         .andExpect(status().isOk())
-        .andExpect(content().string("Welcome, in order to make an API call direct your browser or " +
-            "Postman to an endpoint \n\n This can be done using the following format: " +
-            "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
+        .andExpect(content().string("Welcome, in order to make an API call "
+            + "direct your browser or Postman to an endpoint \n\n "
+            + "This can be done using the following format: "
+            + "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
   }
 
   @Test
   public void indexIndexTest() throws Exception {
     mockMvc.perform(get("/index"))
         .andExpect(status().isOk())
-        .andExpect(content().string("Welcome, in order to make an API call direct your browser or " +
-            "Postman to an endpoint \n\n This can be done using the following format: " +
-            "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
+        .andExpect(content().string("Welcome, in order to make an API call "
+            + "direct your browser or Postman to an endpoint \n\n "
+            + "This can be done using the following format: "
+            + "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
   }
 
   @Test
   public void indexHomeTest() throws Exception {
     mockMvc.perform(get("/home"))
         .andExpect(status().isOk())
-        .andExpect(content().string("Welcome, in order to make an API call direct your browser or " +
-            "Postman to an endpoint \n\n This can be done using the following format: " +
-            "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
+        .andExpect(content().string("Welcome, in order to make an API call "
+            + "direct your browser or Postman to an endpoint \n\n "
+            + "This can be done using the following format: "
+            + "\n\n http:127.0.0.1:8080/endpoint?arg=value"));
   }
 
   @Test
@@ -95,8 +102,8 @@ public class RouteControllerTests {
             .param("deptCode", "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("COMS 1004: \nInstructor: Adam Cannon; Location: 417 IAB; " +
-                "Time: 11:40-12:55\n"));
+            .andExpect(content().string("COMS 1004: \nInstructor: Adam Cannon; "
+                + "Location: 417 IAB; Time: 11:40-12:55\n"));
   }
 
   @Test
@@ -115,8 +122,8 @@ public class RouteControllerTests {
             .param("courseCode", "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("\nInstructor: Adam Cannon; Location: 417 IAB; " +
-                "Time: 11:40-12:55"));
+            .andExpect(content().string("\nInstructor: Adam Cannon; Location: 417 IAB; "
+                + "Time: 11:40-12:55"));
   }
 
   @Test
@@ -281,13 +288,14 @@ public class RouteControllerTests {
 
   @Test
   public void addMajorToDeptSuccessTest() throws Exception {
-    Department comsDept = IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
+    Department computerDept =
+        IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
     mockMvc.perform(patch("/addMajorToDept")
             .param("deptCode", "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("Attribute was updated successfully"));
-    assertEquals(comsDept.getNumberOfMajors(), 2701);
+    assertEquals(computerDept.getNumberOfMajors(), 2701);
   }
 
   @Test
@@ -301,13 +309,14 @@ public class RouteControllerTests {
 
   @Test
   public void removeMajorFromDeptSuccessTest() throws Exception {
-    Department comsDept = IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
+    Department computerDept =
+        IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
     mockMvc.perform(patch("/removeMajorFromDept")
             .param("deptCode", "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("Attribute was updated or is at minimum"));
-    assertEquals(comsDept.getNumberOfMajors(), 2699);
+    assertEquals(computerDept.getNumberOfMajors(), 2699);
   }
 
   @Test
@@ -320,7 +329,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void dropStudentFromCourseSuccessTest() throws Exception{
+  public void dropStudentFromCourseSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockCourse.setEnrolledStudentCount(100);
     mockMvc.perform(patch("/dropStudentFromCourse")
@@ -332,7 +341,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void dropStudentFromCourseFailedTest() throws Exception{
+  public void dropStudentFromCourseFailedTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockCourse.setEnrolledStudentCount(0);
     mockMvc.perform(patch("/dropStudentFromCourse")
@@ -344,7 +353,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void dropStudentFromCourseNotFoundTest() throws Exception{
+  public void dropStudentFromCourseNotFoundTest() throws Exception {
     mockMvc.perform(patch("/dropStudentFromCourse")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
@@ -354,7 +363,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void setEnrollStudentCountSuccessTest() throws Exception{
+  public void setEnrollStudentCountSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/setEnrollmentCount")
             .param("deptCode", "COMS")
@@ -367,7 +376,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void setEnrollStudentCountFailedTest() throws Exception{
+  public void setEnrollStudentCountFailedTest() throws Exception {
     mockMvc.perform(patch("/setEnrollmentCount")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
@@ -378,20 +387,20 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void changeCourseTimeSuccessTest() throws Exception{
+  public void changeCourseTimeSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseTime")
             .param("deptCode", "COMS")
             .param("courseCode", "1004")
             .param("time", "11:40-12:00")
             .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-       .andExpect(content().string("Attribute was updated successfully."));
+            .andExpect(status().isOk())
+            .andExpect(content().string("Attribute was updated successfully."));
     assertEquals("11:40-12:00", mockCourse.getCourseTimeSlot());
   }
 
   @Test
-  public void changeCourseTimeNotFoundTest() throws Exception{
+  public void changeCourseTimeNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseTime")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
@@ -402,7 +411,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void changeCourseTeacherSuccessTest() throws Exception{
+  public void changeCourseTeacherSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseTeacher")
             .param("deptCode", "COMS")
@@ -415,7 +424,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void changeCourseTeacherNotFoundTest() throws Exception{
+  public void changeCourseTeacherNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseTeacher")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
@@ -426,7 +435,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void changeCourseLocationSuccessTest() throws Exception{
+  public void changeCourseLocationSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseLocation")
             .param("deptCode", "COMS")
@@ -439,7 +448,7 @@ public class RouteControllerTests {
   }
 
   @Test
-  public void changeCourseLocationNotFoundTest() throws Exception{
+  public void changeCourseLocationNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseLocation")
             .param("deptCode", "COMS")
             .param("courseCode", "1005")
