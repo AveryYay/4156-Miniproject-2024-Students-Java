@@ -1,13 +1,24 @@
 package dev.coms4156.project.individualproject;
 
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+/**
+ * This class contains unit tests for the {@code IndividualProjectApplication} class.
+ */
 @SpringBootTest
 @ContextConfiguration
 public class IndividualProjectApplicationTests {
@@ -15,6 +26,7 @@ public class IndividualProjectApplicationTests {
   private MyFileDatabase mockFileDatabase;
   private IndividualProjectApplication application;
   public static MyFileDatabase originalDatabase;
+
   @BeforeAll
   public static void saveOriginalDatabase() {
     originalDatabase = IndividualProjectApplication.myFileDatabase;
@@ -26,7 +38,7 @@ public class IndividualProjectApplicationTests {
   }
 
   @BeforeEach
-  public void setup(){
+  public void setup() {
     application = new IndividualProjectApplication();
     IndividualProjectApplication.myFileDatabase = mockFileDatabase;
   }

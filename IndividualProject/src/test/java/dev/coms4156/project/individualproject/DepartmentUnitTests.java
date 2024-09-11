@@ -3,12 +3,12 @@ package dev.coms4156.project.individualproject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.util.HashMap;
 
 /**
  * This class contains unit tests for the {@code Department} class.
@@ -16,7 +16,11 @@ import java.util.HashMap;
 @SpringBootTest
 @ContextConfiguration
 public class DepartmentUnitTests {
-
+  /**
+   * Sets up a department with sample courses for testing.
+   * This method initializes a Department object with test data
+   * and is executed before each test case.
+   */
   @BeforeEach
   public void setupDepartmentForTesting() {
     HashMap<String, Course> courseMap = new HashMap<>();
@@ -29,9 +33,9 @@ public class DepartmentUnitTests {
 
   @Test
   public void toStringTest() {
-    String expectedResult = "COMS 1004: \nInstructor: Adam Cannon; Location: 417 IAB; " +
-        "Time: 11:40-12:55\n" + "COMS 3134: \nInstructor: Brian Borowski; Location: 301 URIS; " +
-        "Time: 4:10-5:25\n";
+    String expectedResult = "COMS 1004: \nInstructor: Adam Cannon; Location: 417 IAB; "
+        + "Time: 11:40-12:55\n" + "COMS 3134: \nInstructor: Brian Borowski; Location: 301 URIS; "
+        + "Time: 4:10-5:25\n";
     assertEquals(expectedResult, testDepartment.toString());
   }
 
