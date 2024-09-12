@@ -27,7 +27,7 @@ RouteController.java
 1. findCourseTime returns new ResponseEntity<>("The course meets at: " + "some time ", HttpStatus.OK) if the
    course does exist. Changed to return new ResponseEntity<>("The course meets at: " +
    requestedCourse.getCourseTimeSlot(), HttpStatus.OK).
-   - PMD rule violation: Unused private field `requestedCourse` in `RouteController` class.
+   - PMD rule violation: Unused local variable `requestedCourse` in `RouteController` class.
 2. In retrieveDepartment, it returns HttpStatus.NOT_FOUND when the department was found, and returns HttpStatus.OK
    when the department was not found. -->Swapped
 3. retrieveCourse returns HttpStatus.FORBIDDEN if the course is not found, which is inappropriate. Changed to return
