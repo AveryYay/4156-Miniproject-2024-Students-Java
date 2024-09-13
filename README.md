@@ -1,3 +1,7 @@
-# Welcome Students of 4156
+Name: Avery Fan
 
-Please follow the assignment specifications on Courseworks when completing this project.
+Uni: mf332
+
+Static Analyzer used: PMD
+
+Command: pmd::check

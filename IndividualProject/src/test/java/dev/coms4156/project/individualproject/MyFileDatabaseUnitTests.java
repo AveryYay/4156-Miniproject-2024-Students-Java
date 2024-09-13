@@ -96,7 +96,7 @@ public class MyFileDatabaseUnitTests {
   @Test
   public void deSerializeNotFoundObjectFromFileTest() {
     MyFileDatabase notFoundDatabase = new MyFileDatabase(0, "nonexistentFile.txt");
-    assertNull(notFoundDatabase.getDepartmentMapping());
+    assertTrue(notFoundDatabase.getDepartmentMapping().isEmpty());
   }
 
   @Test
