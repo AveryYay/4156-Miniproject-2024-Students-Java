@@ -22,6 +22,7 @@ Course.java:
    according to the Javadoc, it should only drop a student if a student is enrolled. It also returns false
    no matter what, while it should return true, if dropped successfully, and return false otherwise.
    Changed to the correct logic.
+6. Initial enrolledStudentCount has been set to 500. I changed it to 0.
 
 RouteController.java
 1. findCourseTime returns new ResponseEntity<>("The course meets at: " + "some time ", HttpStatus.OK) if the

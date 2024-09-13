@@ -23,7 +23,7 @@ public class CourseUnitTests {
 
   @Test
   public void getEnrolledStudentCountTest() {
-    assertEquals(500, testCourse.getEnrolledStudentCount());
+    assertEquals(0, testCourse.getEnrolledStudentCount());
   }
 
   @Test
