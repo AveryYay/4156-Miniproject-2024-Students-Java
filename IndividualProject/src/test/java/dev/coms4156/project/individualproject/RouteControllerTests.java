@@ -34,6 +34,7 @@ public class RouteControllerTests {
 
   public static MyFileDatabase originalDatabase;
 
+
   @Autowired
   private MockMvc mockMvc;
 
@@ -99,7 +100,7 @@ public class RouteControllerTests {
   @Test
   public void retrieveDepartmentSuccessTest() throws Exception {
     mockMvc.perform(get("/retrieveDept")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("COMS 1004: \nInstructor: Adam Cannon; "
@@ -109,17 +110,17 @@ public class RouteControllerTests {
   @Test
   public void retrieveDepartmentNotFoundTest() throws Exception {
     mockMvc.perform(get("/retrieveDept")
-            .param("deptCode", "Random")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Department Not Found"));
+            .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
   public void retrieveCourseSuccessTest() throws Exception {
     mockMvc.perform(get("/retrieveCourse")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("\nInstructor: Adam Cannon; Location: 417 IAB; "
@@ -129,21 +130,21 @@ public class RouteControllerTests {
   @Test
   public void retrieveCourseNotFoundTest() throws Exception {
     mockMvc.perform(get("/retrieveCourse")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void retrieveCourseDepartmentNotFoundTest() throws Exception {
     mockMvc.perform(get("/retrieveCourse")
-            .param("deptCode", "Random")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
-        .andExpect(content().string("Department Not Found"));
+        .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
@@ -151,8 +152,8 @@ public class RouteControllerTests {
     Course course = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     course.setEnrolledStudentCount(50);
     mockMvc.perform(get("/isCourseFull")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("false"));
@@ -163,8 +164,8 @@ public class RouteControllerTests {
     Course course = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     course.setEnrolledStudentCount(1000);
     mockMvc.perform(get("/isCourseFull")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string("true"));
@@ -173,27 +174,27 @@ public class RouteControllerTests {
   @Test
   public void isCourseFullNotFoundTest() throws Exception {
     mockMvc.perform(get("/isCourseFull")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void isCourseFullDepartmentNotFoundTest() throws Exception {
     mockMvc.perform(get("/isCourseFull")
-            .param("deptCode", "Random")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
-        .andExpect(content().string("Course Not Found"));
+        .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void getMajorCountFromDepartmentSuccessTest() throws Exception {
     mockMvc.perform(get("/getMajorCountFromDept")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("There are: 2700 majors in the department"));
@@ -202,16 +203,16 @@ public class RouteControllerTests {
   @Test
   public void getMajorCountFromDepartmentNotFoundTest() throws Exception {
     mockMvc.perform(get("/getMajorCountFromDept")
-            .param("deptCode", "Random")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
-        .andExpect(content().string("Department Not Found"));
+        .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
   public void identifyDeptChairSuccessTest() throws Exception {
     mockMvc.perform(get("/idDeptChair")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string("Luca Carloni is the department chair."));
@@ -220,17 +221,17 @@ public class RouteControllerTests {
   @Test
   public void identifyDeptChairFailTest() throws Exception {
     mockMvc.perform(get("/idDeptChair")
-            .param("deptCode", "Random")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Department Not Found"));
+            .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
   public void findCourseLocationSuccessTest() throws Exception {
     mockMvc.perform(get("/findCourseLocation")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("417 IAB is where the course is located."));
@@ -239,18 +240,18 @@ public class RouteControllerTests {
   @Test
   public void findCourseLocationFailTest() throws Exception {
     mockMvc.perform(get("/findCourseLocation")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void findCourseInstructorSuccessTest() throws Exception {
     mockMvc.perform(get("/findCourseInstructor")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("Adam Cannon is the instructor for the course."));
@@ -259,18 +260,18 @@ public class RouteControllerTests {
   @Test
   public void findCourseInstructorFailTest() throws Exception {
     mockMvc.perform(get("/findCourseInstructor")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void findCourseTimeSuccessTest() throws Exception {
     mockMvc.perform(get("/findCourseTime")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("The course meets at: 11:40-12:55"));
@@ -279,11 +280,11 @@ public class RouteControllerTests {
   @Test
   public void findCourseTimeFailTest() throws Exception {
     mockMvc.perform(get("/findCourseTime")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
@@ -291,7 +292,7 @@ public class RouteControllerTests {
     Department computerDept =
         IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
     mockMvc.perform(patch("/addMajorToDept")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("Attribute was updated successfully"));
@@ -301,10 +302,10 @@ public class RouteControllerTests {
   @Test
   public void addMajorToDeptFailedTest() throws Exception {
     mockMvc.perform(patch("/addMajorToDept")
-            .param("deptCode", "Random")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Department Not Found"));
+            .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
@@ -312,7 +313,7 @@ public class RouteControllerTests {
     Department computerDept =
         IndividualProjectApplication.myFileDatabase.getDepartmentMapping().get("COMS");
     mockMvc.perform(patch("/removeMajorFromDept")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("Attribute was updated or is at minimum"));
@@ -322,10 +323,10 @@ public class RouteControllerTests {
   @Test
   public void removeMajorFromDeptFailedTest() throws Exception {
     mockMvc.perform(patch("/removeMajorFromDept")
-            .param("deptCode", "Random")
+            .param(RouteController.DEPT_CODE_PARAM, "Random")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Department Not Found"));
+            .andExpect(content().string(RouteController.DEPT_NOT_FOUND));
   }
 
   @Test
@@ -333,8 +334,8 @@ public class RouteControllerTests {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockCourse.setEnrolledStudentCount(100);
     mockMvc.perform(patch("/dropStudentFromCourse")
-        .param("deptCode", "COMS")
-        .param("courseCode", "1004")
+        .param(RouteController.DEPT_CODE_PARAM, "COMS")
+        .param(RouteController.COURSE_CODE_PARAM, "1004")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string("Student has been dropped."));
@@ -345,8 +346,8 @@ public class RouteControllerTests {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockCourse.setEnrolledStudentCount(0);
     mockMvc.perform(patch("/dropStudentFromCourse")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().string("Student has not been dropped."));
@@ -355,114 +356,114 @@ public class RouteControllerTests {
   @Test
   public void dropStudentFromCourseNotFoundTest() throws Exception {
     mockMvc.perform(patch("/dropStudentFromCourse")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
-        .andExpect(content().string("Course Not Found"));
+        .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void setEnrollStudentCountSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/setEnrollmentCount")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .param("count", "123")
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().string("Attribute was updated successfully."));
+        .andExpect(content().string(RouteController.ATTRIBUTE_UPDATE_SUCCESS));
     assertEquals(123, mockCourse.getEnrolledStudentCount());
   }
 
   @Test
   public void setEnrollStudentCountFailedTest() throws Exception {
     mockMvc.perform(patch("/setEnrollmentCount")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .param("count", "123")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void changeCourseTimeSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseTime")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .param("time", "11:40-12:00")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("Attribute was updated successfully."));
+            .andExpect(content().string(RouteController.ATTRIBUTE_UPDATE_SUCCESS));
     assertEquals("11:40-12:00", mockCourse.getCourseTimeSlot());
   }
 
   @Test
   public void changeCourseTimeNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseTime")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .param("time", "11:40-12:00")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-           .andExpect(content().string("Course Not Found"));
+           .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void changeCourseTeacherSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseTeacher")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .param("teacher", "New Instructor")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("Attribute was updated successfully."));
+            .andExpect(content().string(RouteController.ATTRIBUTE_UPDATE_SUCCESS));
     assertEquals("New Instructor", mockCourse.getInstructorName());
   }
 
   @Test
   public void changeCourseTeacherNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseTeacher")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .param("teacher", "New Instructor")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void changeCourseLocationSuccessTest() throws Exception {
     Course mockCourse = mockDepartmentData.get("COMS").getCourseSelection().get("1004");
     mockMvc.perform(patch("/changeCourseLocation")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1004")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1004")
             .param("location", "New Location")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().string("Attribute was updated successfully."));
+            .andExpect(content().string(RouteController.ATTRIBUTE_UPDATE_SUCCESS));
     assertEquals("New Location", mockCourse.getCourseLocation());
   }
 
   @Test
   public void changeCourseLocationNotFoundTest() throws Exception {
     mockMvc.perform(patch("/changeCourseLocation")
-            .param("deptCode", "COMS")
-            .param("courseCode", "1005")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
+            .param(RouteController.COURSE_CODE_PARAM, "1005")
             .param("location", "New Location")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
-            .andExpect(content().string("Course Not Found"));
+            .andExpect(content().string(RouteController.COURSE_NOT_FOUND));
   }
 
   @Test
   public void handleExceptionTest() throws Exception {
     when(myFileDatabase.getDepartmentMapping()).thenThrow(new RuntimeException("Database Error"));
     mockMvc.perform(get("/retrieveDept")
-            .param("deptCode", "COMS")
+            .param(RouteController.DEPT_CODE_PARAM, "COMS")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError())
             .andExpect(content().string("An Error has occurred"));

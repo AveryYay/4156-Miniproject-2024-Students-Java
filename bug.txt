@@ -36,12 +36,35 @@ RouteController.java
    which should return departmentMapping.get(deptCode).
    It also returns HttpStatus.Forbidden when the department is not found, which is inappropriate. Changed to return
    HttpStatus.NOT_FOUND instead.
-5. changeCourseTime returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
-   was updated successfully."
-6. changeCourseTeacher returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
-   was updated successfully."
-7. changeCourseLocation returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
-   was updated successfully."
-8. setEnrollmentCount returns "Attributed was updated successfully." which contains grammar error. Changed to "Attribute
-   was updated successfully."
-9. handleException returns HttpStatus.Ok, which is inappropriate. Changed to return HttpStatus.INTERNAL_SERVER_ERROR.
+5. handleException returns HttpStatus.Ok, which is inappropriate. Changed to return HttpStatus.INTERNAL_SERVER_ERROR.
+6. changeCourseTime, changeCourseTeacher, changeCourseLocation, setEnrollmentCount all have a return message
+   "Attributed was updated successfully." which contains grammar error. I created a static variable ATTRIBUTE_UPDATE_SUCCESS
+   and I replaced all "Attributed was updated successfully." to ATTRIBUTE_UPDATE_SUCCESS.
+   - PMD Rule violation: AvoidDuplicateLiterals
+7. The String literal "courseCode" appears a lot of times in this file (rule="AvoidDuplicateLiterals" ruleset="Error Prone").
+    I created a static variable COURSE_CODE_PARAM, and I changed all "courseCode" to
+    COURSE_CODE_PARAM.
+8. The String literal "deptCode" appears 15 times in this file (rule="AvoidDuplicateLiterals" ruleset="Error Prone").
+    I created a static variable DEPT_CODE_PARAM, and I changed all "deptCode" to
+    DEPT_CODE_PARAM.
+    - PMD Rule violation: AvoidDuplicateLiterals
+9. The String literal "Department Not Found" appears a lot of times in this file (rule="AvoidDuplicateLiterals"
+   ruleset="Error Prone"). I created a static variable DEPT_NOT_FOUND, and I changed all
+   "Department Not Found" to DEPT_NOT_FOUND.
+    - PMD Rule violation: AvoidDuplicateLiterals
+10. The String literal "Course Not Found" appears a lot of times in this file (rule="AvoidDuplicateLiterals"
+   ruleset="Error Prone"). I created a static variable COURSE_NOT_FOUND, and I changed all
+   "Course Not Found" to COURSE_NOT_FOUND.
+    - PMD Rule violation: AvoidDuplicateLiterals
+11. In retrieveDepartment, it calls toUpperCase() on deptCode twice without using a Locale (rule="UseLocaleWithCaseConversions"
+    ruleset="Error Prone" ). I added Locale.English.
+    - PMD Rule violation: UseLocaleWithCaseConversions
+
+MyFileDatabase.java:
+1. It's calling a overridable method (deSerializeObjectFromFile()) in the constructor, this could lead to unexpected
+   behavior. I marked deSerializeObjectFromFile as final.
+   - PMD Rule violation: ConstructorCallsOverridableMethod
+2. deSerializeObjectFromFile is returning null when an IOException is caught, it violates the PMD rule. Changed to
+   return an empty hashmap.
+   - PMD Rule violation: ReturnEmptyCollectionRatherThanNull
+
